@@ -4,8 +4,8 @@
   "artifact": "agent-run-manifest",
   "release_version": "v0.1.0-alpha",
   "package_version": "0.1.0a0",
-  "status": "QUALIFIED_FOR_PRIVATE_STAGING",
-  "qualified_at": "2026-08-08T20:05:24.066282+00:00",
+  "status": "APPROVED_FOR_PUBLIC_RELEASE",
+  "qualified_at": "2026-08-08T20:08:07.613943+00:00",
   "qualification": {
     "tests": {
       "status": "PASS",
@@ -16,7 +16,7 @@
     "synthetic_end_to_end": "NOT_APPLICABLE",
     "source_secret_pattern_scan": "PASS",
     "private_implementation_reference_scan": "PASS",
-    "git_history_gitleaks": "PENDING_AFTER_GIT_STAGING",
+    "git_history_gitleaks": "PASS",
     "license": "Apache-2.0",
     "synthetic_examples_only": true
   },
@@ -48,8 +48,8 @@
     "tests/test_manifest.py": "abab03164e9ca97605ff3606a2f66391c60faa99af56487533cfc03476d787ef"
   },
   "limitations": [
-    "Private staging only until Git-history gitleaks and remote-head verification pass.",
-    "This public extraction does not grant Neuruh production authority.",
+    "This is a bounded Public Commons Active Alpha component, not Neuruh production authority.",
     "Active Alpha interfaces may change."
-  ]
+  ],
+  "tested_source_commit": "ceec60558e2b37ca7a5c205d894bc9a66ba7dfbd"
 }
