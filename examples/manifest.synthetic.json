@@ -1,0 +1,99 @@
+{
+  "schema_version": "neuruh.agent-run-manifest.v0.1",
+  "run_id": "run-c1dc2e9e445d4eff870e8353ac1d9a30",
+  "actor_id": "synthetic-agent",
+  "mission": "Demonstrate one bounded governed execution",
+  "started_at": "2026-08-08T20:05:01.776020Z",
+  "ended_at": "2026-08-08T20:05:01.784612Z",
+  "status": "completed",
+  "components": [
+    {
+      "name": "neuruh-agent-run-manifest",
+      "version": "0.1.0a0"
+    },
+    {
+      "name": "neuruh-agent-receipt",
+      "version": "0.1.0"
+    },
+    {
+      "name": "neuruh-governed-exec",
+      "version": "0.1.1a0"
+    },
+    {
+      "name": "neuruh-policy-gate",
+      "version": "0.1.1a0"
+    },
+    {
+      "name": "neuruh-capability-registry",
+      "version": "0.1.1a0"
+    },
+    {
+      "name": "neuruh-inference-health",
+      "version": "0.1.1a0"
+    },
+    {
+      "name": "neuruh-sovereign-agent-starter",
+      "version": "0.1.0a0"
+    }
+  ],
+  "policy": {
+    "policy_id": "synthetic-policy",
+    "policy_version": "sha256:271407a75c9b3451d72bb8283492deea74fcfcb2201f927bfca5a208852dfd3d"
+  },
+  "inference": {
+    "backend": null,
+    "model": null,
+    "health": "unavailable"
+  },
+  "inputs": [],
+  "evidence": [
+    {
+      "evidence_id": "inference-health",
+      "sha256": "sha256:e1c805486525d1b539ff996d59c222960040ccd919eb4963a6e057167e95a5f8",
+      "state": "observed"
+    }
+  ],
+  "decisions": [
+    {
+      "action_id": "action-001",
+      "decision": "allow",
+      "policy_version": "sha256:271407a75c9b3451d72bb8283492deea74fcfcb2201f927bfca5a208852dfd3d",
+      "sha256": "sha256:a553cb7e837086f9b54417285be4c61d920478baf5c84a83861decc3219c7475"
+    }
+  ],
+  "executions": [
+    {
+      "execution_id": "execution-1",
+      "capability": "demo.print",
+      "status": "executed",
+      "decision_action_id": "action-001",
+      "receipt_id": "receipt-2",
+      "sha256": "sha256:f61bde1e13ee766593cd2fdaf25a49f299f0d1c28c611d50c2d3752e240bead6"
+    }
+  ],
+  "receipts": [
+    {
+      "receipt_id": "receipt-0",
+      "seq": 0,
+      "entry_hash": "add92fec774c25fac517e7d28291aba3402731ddbeaf7f6d71cf3e0c9af1845b"
+    },
+    {
+      "receipt_id": "receipt-1",
+      "seq": 1,
+      "entry_hash": "be3bc64057a3417fe1612734f6d63898937b13408581421a6dcac88a6e780f81"
+    },
+    {
+      "receipt_id": "receipt-2",
+      "seq": 2,
+      "entry_hash": "6602310013fdb5a08ac29502ca7be7d668e813ea04995eacb4a728ac13aff5c0"
+    }
+  ],
+  "outputs": [
+    {
+      "artifact_id": "execution-stdout",
+      "sha256": "sha256:766c1c8ffdc5422410c4a35fd485860b2cafc884c15578ec472f2da81b46b901",
+      "media_type": "text/plain"
+    }
+  ],
+  "manifest_digest": "sha256:e670c86613b1d4d5ba064c3598ca7d0e32b7464eeea7cfebbbeff943ac439d13"
+}
