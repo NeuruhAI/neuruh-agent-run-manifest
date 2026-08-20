@@ -1,5 +1,7 @@
 # Neuruh Agent Run Manifest
 
+[![ci](https://github.com/NeuruhAI/neuruh-agent-run-manifest/actions/workflows/ci.yml/badge.svg)](https://github.com/NeuruhAI/neuruh-agent-run-manifest/actions/workflows/ci.yml)
+
 A dependency-free, content-bound manifest for governed agent runs.
 
 It records the run identity, policy, component versions, inference state, content-hashed artifacts, evidence, decisions, executions, and receipt references behind a claim.
