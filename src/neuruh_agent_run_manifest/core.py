@@ -5,7 +5,7 @@ from datetime import datetime, timezone
 from hashlib import sha256
 import json
 import re
-from typing import Any, Mapping, Sequence
+from typing import Any, Mapping
 
 SCHEMA_VERSION = "neuruh.agent-run-manifest.v0.1"
 STATUSES = {"completed", "denied", "escalated", "failed", "dry_run"}
@@ -21,7 +21,13 @@ class ManifestValidationError(ValueError):
 
 
 def canonical_json(value: Any) -> str:
-    return json.dumps(value, sort_keys=True, separators=(",", ":"), ensure_ascii=False, allow_nan=False)
+    return json.dumps(
+        value,
+        sort_keys=True,
+        separators=(",", ":"),
+        ensure_ascii=False,
+        allow_nan=False,
+    )
 
 
 def sha256_ref(value: str | bytes) -> str:
@@ -53,7 +59,9 @@ def _validate_receipt_hash(value: Any, name: str) -> str:
 def _validate_commit(value: Any, name: str) -> str:
     value = _require_nonempty(value, name)
     if not HEX40.fullmatch(value):
-        raise ManifestValidationError(f"{name} must be a 40-character lowercase git commit SHA")
+        raise ManifestValidationError(
+            f"{name} must be a 40-character lowercase git commit SHA"
+        )
     return value
 
 
@@ -68,13 +76,19 @@ def _parse_time(value: Any, name: str) -> datetime:
     return parsed.astimezone(timezone.utc)
 
 
-def _exact_keys(raw: Mapping[str, Any], required: set[str], optional: set[str], context: str) -> None:
+def _exact_keys(
+    raw: Mapping[str, Any], required: set[str], optional: set[str], context: str
+) -> None:
     missing = sorted(required - set(raw))
     unknown = sorted(set(raw) - required - optional)
     if missing:
-        raise ManifestValidationError(f"{context} missing required field(s): {', '.join(missing)}")
+        raise ManifestValidationError(
+            f"{context} missing required field(s): {', '.join(missing)}"
+        )
     if unknown:
-        raise ManifestValidationError(f"{context} contains unknown field(s): {', '.join(unknown)}")
+        raise ManifestValidationError(
+            f"{context} contains unknown field(s): {', '.join(unknown)}"
+        )
 
 
 @dataclass(frozen=True)
@@ -89,11 +103,17 @@ class ArtifactRef:
         return cls(
             _require_nonempty(raw["artifact_id"], "artifact_id"),
             _validate_sha256_ref(raw["sha256"], "artifact sha256"),
-            _require_nonempty(raw.get("media_type", "application/octet-stream"), "media_type"),
+            _require_nonempty(
+                raw.get("media_type", "application/octet-stream"), "media_type"
+            ),
         )
 
     def to_dict(self) -> dict[str, Any]:
-        return {"artifact_id": self.artifact_id, "sha256": self.sha256, "media_type": self.media_type}
+        return {
+            "artifact_id": self.artifact_id,
+            "sha256": self.sha256,
+            "media_type": self.media_type,
+        }
 
 
 @dataclass(frozen=True)
@@ -154,8 +174,12 @@ class InferenceRef:
             backend = _require_nonempty(backend, "inference backend")
         if model is not None:
             model = _require_nonempty(model, "inference model")
-        if health in {"not_used", "unavailable"} and (backend is not None or model is not None):
-            raise ManifestValidationError(f"{health} inference cannot name a backend or model")
+        if health in {"not_used", "unavailable"} and (
+            backend is not None or model is not None
+        ):
+            raise ManifestValidationError(
+                f"{health} inference cannot name a backend or model"
+            )
         if health in {"healthy", "degraded"} and backend is None:
             raise ManifestValidationError(f"{health} inference requires a backend")
         return cls(backend, model, health)
@@ -183,7 +207,11 @@ class EvidenceRef:
         )
 
     def to_dict(self) -> dict[str, Any]:
-        return {"evidence_id": self.evidence_id, "sha256": self.sha256, "state": self.state}
+        return {
+            "evidence_id": self.evidence_id,
+            "sha256": self.sha256,
+            "state": self.state,
+        }
 
 
 @dataclass(frozen=True)
@@ -195,7 +223,12 @@ class DecisionRef:
 
     @classmethod
     def from_mapping(cls, raw: Mapping[str, Any]) -> "DecisionRef":
-        _exact_keys(raw, {"action_id", "decision", "policy_version", "sha256"}, set(), "decision")
+        _exact_keys(
+            raw,
+            {"action_id", "decision", "policy_version", "sha256"},
+            set(),
+            "decision",
+        )
         decision = _require_nonempty(raw["decision"], "decision")
         if decision not in DECISIONS:
             raise ManifestValidationError(f"unknown decision: {decision}")
@@ -207,7 +240,12 @@ class DecisionRef:
         )
 
     def to_dict(self) -> dict[str, Any]:
-        return {"action_id": self.action_id, "decision": self.decision, "policy_version": self.policy_version, "sha256": self.sha256}
+        return {
+            "action_id": self.action_id,
+            "decision": self.decision,
+            "policy_version": self.policy_version,
+            "sha256": self.sha256,
+        }
 
 
 @dataclass(frozen=True)
@@ -229,7 +267,11 @@ class ReceiptRef:
         )
 
     def to_dict(self) -> dict[str, Any]:
-        return {"receipt_id": self.receipt_id, "seq": self.seq, "entry_hash": self.entry_hash}
+        return {
+            "receipt_id": self.receipt_id,
+            "seq": self.seq,
+            "entry_hash": self.entry_hash,
+        }
 
 
 @dataclass(frozen=True)
@@ -243,7 +285,19 @@ class ExecutionRef:
 
     @classmethod
     def from_mapping(cls, raw: Mapping[str, Any]) -> "ExecutionRef":
-        _exact_keys(raw, {"execution_id", "capability", "status", "decision_action_id", "receipt_id", "sha256"}, set(), "execution")
+        _exact_keys(
+            raw,
+            {
+                "execution_id",
+                "capability",
+                "status",
+                "decision_action_id",
+                "receipt_id",
+                "sha256",
+            },
+            set(),
+            "execution",
+        )
         status = _require_nonempty(raw["status"], "execution status")
         if status not in EXECUTION_STATUSES:
             raise ManifestValidationError(f"unknown execution status: {status}")
@@ -316,11 +370,15 @@ class RunManifest:
 
     def seal(self) -> "RunManifest":
         self.validate(check_digest=False)
-        return RunManifest(**{**self.__dict__, "manifest_digest": self.calculated_digest()})
+        return RunManifest(
+            **{**self.__dict__, "manifest_digest": self.calculated_digest()}
+        )
 
     def to_dict(self) -> dict[str, Any]:
         if self.manifest_digest is None:
-            raise ManifestValidationError("manifest must be sealed before serialization")
+            raise ManifestValidationError(
+                "manifest must be sealed before serialization"
+            )
         out = self.body_dict()
         out["manifest_digest"] = self.manifest_digest
         return out
@@ -336,7 +394,9 @@ class RunManifest:
         if self.status not in STATUSES:
             raise ManifestValidationError(f"unknown run status: {self.status}")
         if not self.components:
-            raise ManifestValidationError("at least one component reference is required")
+            raise ManifestValidationError(
+                "at least one component reference is required"
+            )
 
         component_names = [c.name for c in self.components]
         if len(component_names) != len(set(component_names)):
@@ -344,7 +404,9 @@ class RunManifest:
 
         artifact_ids = [x.artifact_id for x in (*self.inputs, *self.outputs)]
         if len(artifact_ids) != len(set(artifact_ids)):
-            raise ManifestValidationError("artifact IDs must be unique across inputs and outputs")
+            raise ManifestValidationError(
+                "artifact IDs must be unique across inputs and outputs"
+            )
 
         evidence_ids = [x.evidence_id for x in self.evidence]
         if len(evidence_ids) != len(set(evidence_ids)):
@@ -355,14 +417,18 @@ class RunManifest:
             raise ManifestValidationError("decision action IDs must be unique")
         for decision in self.decisions:
             if decision.policy_version != self.policy.policy_version:
-                raise ManifestValidationError("decision policy_version does not match manifest policy")
+                raise ManifestValidationError(
+                    "decision policy_version does not match manifest policy"
+                )
 
         receipt_ids = [x.receipt_id for x in self.receipts]
         if len(receipt_ids) != len(set(receipt_ids)):
             raise ManifestValidationError("receipt IDs must be unique")
         receipt_seqs = [x.seq for x in self.receipts]
         if sorted(receipt_seqs) != list(range(len(receipt_seqs))):
-            raise ManifestValidationError("receipt seq values must be contiguous from zero")
+            raise ManifestValidationError(
+                "receipt seq values must be contiguous from zero"
+            )
         receipt_id_set = set(receipt_ids)
 
         execution_ids = [x.execution_id for x in self.executions]
@@ -371,27 +437,48 @@ class RunManifest:
         action_id_set = set(action_ids)
         for execution in self.executions:
             if execution.decision_action_id not in action_id_set:
-                raise ManifestValidationError("execution references an unknown decision action_id")
-            if execution.receipt_id is not None and execution.receipt_id not in receipt_id_set:
-                raise ManifestValidationError("execution references an unknown receipt_id")
+                raise ManifestValidationError(
+                    "execution references an unknown decision action_id"
+                )
+            if (
+                execution.receipt_id is not None
+                and execution.receipt_id not in receipt_id_set
+            ):
+                raise ManifestValidationError(
+                    "execution references an unknown receipt_id"
+                )
 
         if self.status == "denied":
             if not any(x.decision == "deny" for x in self.decisions):
                 raise ManifestValidationError("denied run requires a deny decision")
             if any(x.status in {"executed", "dry_run"} for x in self.executions):
-                raise ManifestValidationError("denied run cannot contain executed/dry-run execution")
+                raise ManifestValidationError(
+                    "denied run cannot contain executed/dry-run execution"
+                )
         if self.status == "escalated":
             if not any(x.decision == "escalate" for x in self.decisions):
-                raise ManifestValidationError("escalated run requires an escalate decision")
+                raise ManifestValidationError(
+                    "escalated run requires an escalate decision"
+                )
             if any(x.status in {"executed", "dry_run"} for x in self.executions):
-                raise ManifestValidationError("escalated run cannot contain executed/dry-run execution")
-        if self.status == "completed" and any(x.status != "executed" for x in self.executions):
-            raise ManifestValidationError("completed run cannot contain non-executed execution records")
+                raise ManifestValidationError(
+                    "escalated run cannot contain executed/dry-run execution"
+                )
+        if self.status == "completed" and any(
+            x.status != "executed" for x in self.executions
+        ):
+            raise ManifestValidationError(
+                "completed run cannot contain non-executed execution records"
+            )
         if self.status == "dry_run":
             if not any(x.status == "dry_run" for x in self.executions):
-                raise ManifestValidationError("dry_run status requires at least one dry_run execution")
+                raise ManifestValidationError(
+                    "dry_run status requires at least one dry_run execution"
+                )
             if any(x.status == "executed" for x in self.executions):
-                raise ManifestValidationError("dry_run status cannot contain executed execution records")
+                raise ManifestValidationError(
+                    "dry_run status cannot contain executed execution records"
+                )
 
         if check_digest:
             if self.manifest_digest is None:
@@ -403,17 +490,41 @@ class RunManifest:
     @classmethod
     def from_mapping(cls, raw: Mapping[str, Any]) -> "RunManifest":
         required = {
-            "schema_version", "run_id", "actor_id", "mission", "started_at", "ended_at", "status",
-            "components", "policy", "inference", "inputs", "evidence", "decisions", "executions",
-            "receipts", "outputs", "manifest_digest",
+            "schema_version",
+            "run_id",
+            "actor_id",
+            "mission",
+            "started_at",
+            "ended_at",
+            "status",
+            "components",
+            "policy",
+            "inference",
+            "inputs",
+            "evidence",
+            "decisions",
+            "executions",
+            "receipts",
+            "outputs",
+            "manifest_digest",
         }
         _exact_keys(raw, required, set(), "manifest")
         if raw["schema_version"] != SCHEMA_VERSION:
             raise ManifestValidationError("unsupported schema_version")
-        for field in ("components", "inputs", "evidence", "decisions", "executions", "receipts", "outputs"):
+        for field in (
+            "components",
+            "inputs",
+            "evidence",
+            "decisions",
+            "executions",
+            "receipts",
+            "outputs",
+        ):
             if not isinstance(raw[field], list):
                 raise ManifestValidationError(f"{field} must be an array")
-        if not isinstance(raw["policy"], Mapping) or not isinstance(raw["inference"], Mapping):
+        if not isinstance(raw["policy"], Mapping) or not isinstance(
+            raw["inference"], Mapping
+        ):
             raise ManifestValidationError("policy and inference must be objects")
 
         manifest = cls(
@@ -432,7 +543,9 @@ class RunManifest:
             executions=tuple(ExecutionRef.from_mapping(x) for x in raw["executions"]),
             receipts=tuple(ReceiptRef.from_mapping(x) for x in raw["receipts"]),
             outputs=tuple(ArtifactRef.from_mapping(x) for x in raw["outputs"]),
-            manifest_digest=_validate_sha256_ref(raw["manifest_digest"], "manifest_digest"),
+            manifest_digest=_validate_sha256_ref(
+                raw["manifest_digest"], "manifest_digest"
+            ),
         )
         manifest.validate()
         return manifest

@@ -2,54 +2,42 @@
   "schema_version": "neuruh.public-release-receipt.v1",
   "repository": "NeuruhAI/neuruh-agent-run-manifest",
   "artifact": "agent-run-manifest",
-  "release_version": "v0.1.0-alpha",
-  "package_version": "0.1.0a0",
+  "release_version": "v0.1.1-alpha",
+  "package_version": "0.1.1a0",
   "status": "APPROVED_FOR_PUBLIC_RELEASE",
-  "qualified_at": "2026-08-08T20:08:07.613943+00:00",
+  "qualified_at": "2026-08-20T06:51:36.853005+00:00",
+  "tested_source_commit": "PENDING_COMMIT",
+  "previous_release_commit": "b8e9dab5476890c5ac5d36791c9b546b0357267a",
   "qualification": {
     "tests": {
       "status": "PASS",
-      "count": 20
+      "count": 20,
+      "command": "python -m unittest discover -s tests -v"
     },
-    "wheel_build": "PASS",
-    "wheel_sha256": "5ef576711369a688530b1f6794a370601a4e8b0cd803fd23c38741f2fb3c42ac",
-    "synthetic_end_to_end": "NOT_APPLICABLE",
-    "source_secret_pattern_scan": "PASS",
-    "private_implementation_reference_scan": "PASS",
-    "git_history_gitleaks": "PASS",
+    "secret_scan": "PASS",
+    "history_secret_scan": "PASS",
+    "private_reference_scan": "PASS",
+    "clean_environment_install": "PASS",
     "license": "Apache-2.0",
-    "synthetic_examples_only": true
+    "synthetic_examples_only": true,
+    "standalone_clean_history": true,
+    "continuous_integration": "github-actions/.github/workflows/ci.yml"
   },
   "public_boundary": {
-    "production_runtime_exported": false,
-    "production_routing_exported": false,
-    "private_policies_exported": false,
-    "production_authority_topology_exported": false,
-    "customer_data_exported": false,
-    "private_memory_exported": false,
-    "proprietary_scoring_exported": false,
-    "domain_recipes_exported": false
+    "production_runtime": false,
+    "production_routing": false,
+    "private_policies": false,
+    "production_authority_topology": false,
+    "customer_data": false,
+    "private_memory": false,
+    "proprietary_scoring": false,
+    "domain_recipes": false,
+    "private_connectors": false
   },
-  "file_sha256": {
-    ".gitignore": "33f23ea58805caa9297594b41fdc19a327067a0861eebae6e3be1eb53eb02e1d",
-    "LICENSE": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
-    "PUBLIC_PRIVATE_BOUNDARY.md": "3736013ba9da8382a8741882424437496e8cce5117603ecbeef4b305754f59af",
-    "README.md": "08cbb91d4726c4db6e9f0bb603adac14950bb57d3a1414877fe908b31464eb06",
-    "SECURITY.md": "b1f181fabe65cf019dcdc44d0223ed589f2d498b85d6d5bef5add3bf64525723",
-    "build/lib/neuruh_agent_run_manifest/__init__.py": "c7e44c9ee748b74746b6def2c1eb2dd75e169dd45427bbdc2dfeed1f800160cf",
-    "build/lib/neuruh_agent_run_manifest/cli.py": "6806239b5518446540c59a199116e16e927a66a686e5cdaf8ed318dd88a2a785",
-    "build/lib/neuruh_agent_run_manifest/core.py": "90c04ee77a2de70b7b72138ed7a3733cae5902b921d531ec4d087100b134affb",
-    "examples/manifest.synthetic.json": "3cf495c4dfd1a897fd3fa79ef5b04b4289da5a0e8099ffc4c95ff5a54628dd05",
-    "pyproject.toml": "be143f07ea42efddbe1036c429e58339142efbb2a70681c70c82fa7c7f9c7347",
-    "schema/agent-run-manifest.v0.1.schema.json": "953a25d37a2600fa9d59ab23a26f49884b68c5c9a60ce908fbc3df71428f314c",
-    "src/neuruh_agent_run_manifest/__init__.py": "c7e44c9ee748b74746b6def2c1eb2dd75e169dd45427bbdc2dfeed1f800160cf",
-    "src/neuruh_agent_run_manifest/cli.py": "6806239b5518446540c59a199116e16e927a66a686e5cdaf8ed318dd88a2a785",
-    "src/neuruh_agent_run_manifest/core.py": "90c04ee77a2de70b7b72138ed7a3733cae5902b921d531ec4d087100b134affb",
-    "tests/test_manifest.py": "abab03164e9ca97605ff3606a2f66391c60faa99af56487533cfc03476d787ef"
-  },
+  "maturity": "ACTIVE_ALPHA",
   "limitations": [
-    "This is a bounded Public Commons Active Alpha component, not Neuruh production authority.",
-    "Active Alpha interfaces may change."
-  ],
-  "tested_source_commit": "ceec60558e2b37ca7a5c205d894bc9a66ba7dfbd"
+    "This is a bounded public extraction, not the Neuruh production runtime.",
+    "Passing validation does not itself grant production authority.",
+    "Interfaces and behavior may change during alpha development."
+  ]
 }

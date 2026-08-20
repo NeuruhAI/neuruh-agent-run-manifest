@@ -4,15 +4,26 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "neuruh-agent-run-manifest"
-version = "0.1.0a0"
+version = "0.1.1a0"
 description = "Deterministic, content-bound run manifest for governed agent systems."
 requires-python = ">=3.11"
 readme = "README.md"
-license = {text = "Apache-2.0"}
+license = "Apache-2.0"
+license-files = ["LICENSE"]
 authors = [{name = "Jeramie Hicks / Neuruh"}]
 
 [project.scripts]
 neuruh-agent-run-manifest = "neuruh_agent_run_manifest.cli:main"
 
+[project.urls]
+Homepage = "https://github.com/NeuruhAI/neuruh-agent-run-manifest"
+Repository = "https://github.com/NeuruhAI/neuruh-agent-run-manifest"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
 [tool.setuptools.packages.find]
 where = ["src"]
+
+[tool.setuptools.data-files]
+"share/neuruh-agent-run-manifest/schemas" = ["schema/*.json"]
