@@ -2,12 +2,12 @@
   "schema_version": "neuruh.public-release-receipt.v1",
   "repository": "NeuruhAI/neuruh-agent-run-manifest",
   "artifact": "agent-run-manifest",
-  "release_version": "v0.1.1-alpha",
-  "package_version": "0.1.1a0",
+  "release_version": "v0.1.2-alpha",
+  "package_version": "0.1.2a0",
   "status": "APPROVED_FOR_PUBLIC_RELEASE",
   "qualified_at": "2026-08-20T06:51:36.853005+00:00",
-  "tested_source_commit": "b414c467fa71113cb6fdcd24e40540fabd2858ec",
-  "previous_release_commit": "b8e9dab5476890c5ac5d36791c9b546b0357267a",
+  "tested_source_commit": "PENDING_COMMIT",
+  "previous_release_commit": "cd2ce07c7487908be2e564988297b2af04111497",
   "qualification": {
     "tests": {
       "status": "PASS",

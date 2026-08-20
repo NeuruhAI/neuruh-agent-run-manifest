@@ -29,4 +29,10 @@ __all__ = [
     "canonical_json",
     "sha256_ref",
 ]
-__version__ = "0.1.0a0"
+
+from importlib.metadata import PackageNotFoundError, version as _metadata_version
+
+try:
+    __version__ = _metadata_version("neuruh-agent-run-manifest")
+except PackageNotFoundError:  # running from a source tree that was never installed
+    __version__ = "unknown"

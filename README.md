@@ -17,7 +17,7 @@ pip install .
 Or install a pinned release directly:
 
 ```bash
-pip install "neuruh-agent-run-manifest @ git+https://github.com/NeuruhAI/neuruh-agent-run-manifest.git@v0.1.1-alpha"
+pip install "neuruh-agent-run-manifest @ git+https://github.com/NeuruhAI/neuruh-agent-run-manifest.git@v0.1.2-alpha"
 ```
 
 ## Verify a manifest
